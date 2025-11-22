@@ -1,0 +1,29 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# Environment variables / secret files
+.env
+*.env
+
+# Django static & media (generated during runtime)
+static/
+media/
+
+# Git repository files
+.git/
+.gitignore
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# OS-generated files
+*.log
+*.sqlite3
