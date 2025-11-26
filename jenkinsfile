@@ -1,0 +1,37 @@
+pipeline {
+  agent {
+    docker {
+      image 'python:3.11'
+      args '-v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
+
+  environment {
+    IMAGE_NAME = "mydjangoapp"
+    IMAGE_TAG  = "${env.GIT_COMMIT?.substring(0,7) ?: 'local'}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Install dependencies') {
+      steps {
+        sh "pip install -r requirements.txt"
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+      }
+    }
+
+    stage('Run Django check') {
+      steps {
+        sh "docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} python manage.py check"
+      }
+    }
+  }
+}
